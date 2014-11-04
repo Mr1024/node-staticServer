@@ -1,0 +1,14 @@
+{
+  "name": "nodeserver",
+  "version": "0.0.1",
+  "description": "nodeserver",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "nodeserver"
+  ],
+  "author": "Mr1024",
+  "license": "ISC"
+}
