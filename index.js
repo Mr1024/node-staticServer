@@ -10,7 +10,8 @@ http.createServer(function(req, res) {
     var reqURL = req.url;
     var reqHeader = req.headers;
     var pathname = url.parse(reqURL).pathname;
-    var filePath = process.cwd() + pathname;
+    pathname = pathname.slice(-1) === "/" ? (pathname + config.Welcome.file) : pathname;
+    var filePath = path.join(process.cwd(), path.normalize(pathname.replace(/\.\./g, '')));
     var ext = path.extname(pathname);
     ext = ext ? ext.slice(1) : 'unknown';
     var contentType = mime[ext] || "text/plain";
@@ -54,7 +55,7 @@ http.createServer(function(req, res) {
                             });
                             raw.pipe(res);
                         }
-                        raw.on('error',function() {
+                        raw.on('error', function() {
                             res.writeHead(500, {
                                 'Content-Type': 'text/plain'
                             });
