@@ -6,7 +6,7 @@ var zlib = require('zlib');
 var portscanner = require('portscanner');
 var mime = require('./lib/mime');
 var config = require('./lib/config');
-http.createServer(function(req, res) {
+var httpserver = http.createServer(function(req, res) {
     var reqURL = req.url;
     var reqHeader = req.headers;
     var pathname = url.parse(reqURL).pathname;
@@ -118,4 +118,10 @@ http.createServer(function(req, res) {
             });*/
         }
     });
-}).listen(3000);
+});
+portscanner.findAPortNotInUse(3000, 6000, '127.0.0.1', function(error, port) {
+    if (!error) {
+        httpserver.listen(port);
+        console.log('start server listen the ' + port + ' port');
+    }
+});
