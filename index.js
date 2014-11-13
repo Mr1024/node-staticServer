@@ -4,8 +4,10 @@ var url = require('url');
 var fs = require('fs');
 var zlib = require('zlib');
 var portscanner = require('portscanner');
+var program = require('commander');
 var mime = require('./lib/mime');
 var config = require('./lib/config');
+program.version('0.0.1').option('-d, --dev', 'launch a server in the development mode').parse(process.argv);
 var httpserver = http.createServer(function(req, res) {
     var reqURL = req.url;
     var reqHeader = req.headers;
@@ -33,28 +35,34 @@ var httpserver = http.createServer(function(req, res) {
                     if (reqHeader['ifModifiedSince'] && lastModified == reqHeader['ifModifiedSince']) {
                         res.writeHead(304, "Not Modified");
                     } else {
-                        if (ext.match(config.Expires.fileMatch)) {
-                            var expires = new Date();
-                            expires.setTime(expires.getTime() + config.Expires.maxAge * 1000);
-                            res.setHeader("Expires", expires.toUTCString());
-                            res.setHeader('Cache-Control', "max-age=" + config.Expires.maxAge);
-                        }
-                        if (matched && acceptEncoding.match(/\bgzip\b/)) {
-                            res.writeHead(200, "Ok", {
-                                'Content-Encoding': 'gzip'
-                            });
-                            raw.pipe(zlib.createGzip()).pipe(res);
-                        } else if (matched && acceptEncoding.match(/\bdeflate\b/)) {
-                            res.writeHead(200, "Ok", {
-                                'Content-Encoding': 'deflate'
-                            });
-                            raw.pipe(zlib.createDeflate()).pipe(res);
+                        if (!program.dev) {
+                            if (ext.match(config.Expires.fileMatch)) {
+                                var expires = new Date();
+                                expires.setTime(expires.getTime() + config.Expires.maxAge * 1000);
+                                res.setHeader("Expires", expires.toUTCString());
+                                res.setHeader('Cache-Control', "max-age=" + config.Expires.maxAge);
+                            }
+                            if (matched && acceptEncoding.match(/\bgzip\b/)) {
+                                res.writeHead(200, "Ok", {
+                                    'Content-Encoding': 'gzip'
+                                });
+                                raw.pipe(zlib.createGzip()).pipe(res);
+                            } else if (matched && acceptEncoding.match(/\bdeflate\b/)) {
+                                res.writeHead(200, "Ok", {
+                                    'Content-Encoding': 'deflate'
+                                });
+                                raw.pipe(zlib.createDeflate()).pipe(res);
+                            } else {
+
+                            }
                         } else {
+                            console.info('%s %s', req.method, req.url);
                             res.writeHead(200, {
                                 'Content-Type': contentType
                             });
                             raw.pipe(res);
                         }
+
                         raw.on('error', function() {
                             res.writeHead(500, {
                                 'Content-Type': 'text/plain'
