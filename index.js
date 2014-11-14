@@ -73,57 +73,6 @@ var httpserver = http.createServer(function(req, res) {
                 }
 
             });
-            /*var raw = fs.createReadStream(filePath);
-            var acceptEncoding = reqHeader['accept-encoding'] || "";
-            var matched = ext.match(config.Compress.match);
-            if (matched && acceptEncoding.match(/\bgzip\b/)) {
-                res.writeHead(200, "Ok", {
-                    'Content-Encoding': 'gzip'
-                });
-                raw.pipe(zlib.createGzip()).pipe(res);
-            } else if (matched && acceptEncoding.match(/\bdeflate\b/)) {
-                res.writeHead(200, "Ok", {
-                    'Content-Encoding': 'deflate'
-                });
-                raw.pipe(zlib.createDeflate()).pipe(res);
-            } else {
-                res.writeHead(200, "Ok");
-                raw.pipe(res);
-            }
-            raw.on('error', function()function() {
-                res.writeHead(500, {
-                    'Content-Type': 'text/plain'
-                });
-                res.end(err);
-            });
-            fs.readFile(filePath, 'binary', function(err, file) {
-                if (err) {
-                    res.writeHead(500, {
-                        'Content-Type': 'text/plain'
-                    });
-                    res.end(err);
-                } else {
-                    fs.stat(filePath, function(err, stat) {
-                        var lastModified = stat.mtime.toUTCString();
-                        res.setHeader('Last-Modified', lastModified);
-                        if (reqHeader['ifModifiedSince'] && lastModified == reqHeader['ifModifiedSince']) {
-                            res.writeHead(304, "Not Modified");
-                        } else {
-                            if (ext.match(config.Expires.fileMatch)) {
-                                var expires = new Date();
-                                expires.setTime(expires.getTime() + config.Expires.maxAge * 1000);
-                                res.setHeader("Expires", expires.toUTCString());
-                                res.setHeader('Cache-Control', "max-age=" + config.Expires.maxAge);
-                            }
-                            res.writeHead(200, {
-                                'Content-Type': contentType
-                            });
-                            res.write(file, "binary");
-                        }
-                        res.end();
-                    });
-                }
-            });*/
         }
     });
 });

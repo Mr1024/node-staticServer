@@ -1,14 +1,28 @@
 {
-  "name": "nodeserver",
-  "version": "0.0.1",
-  "description": "nodeserver",
-  "main": "server.js",
-  "scripts": {
-    "test": "test"
-  },
-  "keywords": [
-    "nodeserver"
-  ],
-  "author": "Mr1024",
-  "license": "ISC"
+    "name": "nhs",
+    "version": "0.0.1",
+    "description": "nhs(Nod.js HTTP Server) is a node.js http server.",
+    "main": "index.js",
+    "keywords": [
+        "nodeserver", "http", "server", "nodejs"
+    ],
+    "homepage": "https://github.com/Mr1024/node-staticServer",
+    "author": {
+        "name": "Mr1024",
+        "email": "publiczhongemail@163.com",
+        "url": "https://github.com/Mr1024"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:Mr1024/node-staticServer.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Mr1024/node-staticServer/issues"
+    },
+    "dependencies": {
+        "commander": "*",
+        "portscanner": "*"
+    },
+    "preferGlobal": true,
+    "license": "MIT"
 }
