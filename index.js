@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var http = require('http');
 var path = require('path');
 var url = require('url');
@@ -6,8 +8,9 @@ var zlib = require('zlib');
 var portscanner = require('portscanner');
 var program = require('commander');
 var mime = require('./lib/mime');
+var package = require("./package.json");
 var config = require('./lib/config');
-program.version('0.0.1').option('-d, --dev', 'launch a server in the development mode').parse(process.argv);
+program.version(package.version).option('-d, --dev', 'launch a server in the development mode').parse(process.argv);
 var httpserver = http.createServer(function(req, res) {
     var reqURL = req.url;
     var reqHeader = req.headers;
