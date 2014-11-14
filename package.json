@@ -24,7 +24,8 @@
     },
     "dependencies": {
         "commander": "*",
-        "portscanner": "*"
+        "portscanner": "*",
+        "open":"~0.0.5"
     },
     "preferGlobal": true,
     "license": "MIT"

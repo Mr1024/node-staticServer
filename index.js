@@ -4,6 +4,7 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 var fs = require('fs');
+var open = require('open');
 var zlib = require('zlib');
 var portscanner = require('portscanner');
 var program = require('commander');
@@ -82,6 +83,8 @@ var httpserver = http.createServer(function(req, res) {
 portscanner.findAPortNotInUse(3000, 6000, '127.0.0.1', function(error, port) {
     if (!error) {
         httpserver.listen(port);
+        var target = 'http://127.0.0.1:' + port+'/index.html';
+        open(target);
         console.log('start server listen the ' + port + ' port');
     }
 });
