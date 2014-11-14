@@ -8,8 +8,8 @@ var open = require('open');
 var zlib = require('zlib');
 var portscanner = require('portscanner');
 var program = require('commander');
-var mime = require('./lib/mime');
-var package = require("./package.json");
+var mime = require('./lib/mime').types;
+var package = require('./package.json');
 var config = require('./lib/config');
 program.version(package.version).option('-d, --dev', 'launch a server in the development mode').parse(process.argv);
 var httpserver = http.createServer(function(req, res) {
@@ -83,7 +83,7 @@ var httpserver = http.createServer(function(req, res) {
 portscanner.findAPortNotInUse(3000, 6000, '127.0.0.1', function(error, port) {
     if (!error) {
         httpserver.listen(port);
-        var target = 'http://127.0.0.1:' + port+'/index.html';
+        var target = 'http://localhost:' + port + '/index.html';
         open(target);
         console.log('start server listen the ' + port + ' port');
     }
