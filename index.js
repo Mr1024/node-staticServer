@@ -16,8 +16,12 @@ var httpserver = http.createServer(function(req, res) {
     var reqURL = req.url;
     var reqHeader = req.headers;
     var pathname = url.parse(reqURL).pathname;
-    pathname = pathname.slice(-1) === "/" ? (pathname + config.Welcome.file) : pathname;
-    var filePath = path.join(process.cwd(), path.normalize(pathname.replace(/\.\./g, '')));
+    if (program.dev) {
+
+    } else {
+        pathname = pathname.slice(-1) === "/" ? (pathname + config.Welcome.file) : pathname;
+        var filePath = path.join(process.cwd(), path.normalize(pathname.replace(/\.\./g, '')));
+    }
     var ext = path.extname(pathname);
     ext = ext ? ext.slice(1) : 'unknown';
     var contentType = mime[ext] || "text/plain";
