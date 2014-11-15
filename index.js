@@ -22,6 +22,7 @@ var httpserver = http.createServer(function(req, res) {
     ext = ext ? ext.slice(1) : 'unknown';
     var contentType = mime[ext] || "text/plain";
     fs.exists(filePath, function(exists) {
+        console.log(exists);
         if (!exists) {
             res.writeHead(404, {
                 'Content-Type': 'text/plain'
