@@ -6,8 +6,11 @@ node-staticServer
 npm install -g nhs
 ```
 ##Usage
-Starting nhs
-nhs server.js
+Starting nhs<br />
+```shell
+-> cd yourproject
+-> nhs
+```
 ##Available Options
  -h, --help     output usage information<br />
  -V, --version  output the version number<br />
