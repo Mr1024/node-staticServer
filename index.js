@@ -10,6 +10,7 @@ var portscanner = require('portscanner');
 var program = require('commander');
 var mime = require('./lib/mime').types;
 var package = require('./package.json');
+var showDir = require('./lib/showDir');
 var config = require('./lib/config');
 program.version(package.version).option('-d, --dev', 'launch a server in the development mode').parse(process.argv);
 var httpserver = http.createServer(function(req, res) {
@@ -20,21 +21,7 @@ var httpserver = http.createServer(function(req, res) {
     var filePath = path.join(process.cwd(), path.normalize(pathname.replace(/\.\./g, '')));
     var ext = path.extname(pathname);
     if (program.dev && !ext) {
-        var reg = /^\/?(.*?)\/?$/;
-        var pathname = pathname.replace(reg, "$1");
-        var pathArry = pathname.split("/");
-        while (pathArry.length) {
-            var pathstr = pathArry.join("/");
-            var filePath = path.join(process.cwd(), path.normalize(pathstr.replace(/\.\./g, '')));
-            try {
-                var files = fs.readdirSync(filePath);
-                console.log(files);
-                break;
-            } catch (e) {
-                pathArry.pop();
-            }
-        }
-
+        showDir(pathname,res);
     } else {
         ext = ext ? ext.slice(1) : 'unknown';
         var contentType = mime[ext] || "text/plain";
