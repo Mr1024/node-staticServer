@@ -1,6 +1,6 @@
 {
     "name": "nhs",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "nhs(Nod.js HTTP Server) is a node.js http server.",
     "main": "index.js",
     "keywords": [
