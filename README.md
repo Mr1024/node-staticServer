@@ -14,6 +14,7 @@ Starting nhs<br />
 ##Available Options
  -h, --help     output usage information<br />
  -V, --version  output the version number<br />
- -d, --dev      launch a server in the development mode
+ -d, --dev      launch a server in the development mode<br />
+ -p, --port     set a listen port (default 3000,if do not set this param will automatically assigned port)
  
 
