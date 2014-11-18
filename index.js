@@ -12,27 +12,34 @@ var mime = require('./lib/mime').types;
 var package = require('./package.json');
 var showDir = require('./lib/showDir');
 var config = require('./lib/config');
-program.version(package.version).option('-d, --dev', 'launch a server in the development mode').parse(process.argv);
+program.version(package.version).option('-d, --dev', 'launch a server in the development mode').option('-p, --port [port]', 'set a server listening port').parse(process.argv);
 var httpserver = http.createServer(function(req, res) {
     var reqURL = req.url;
     var reqHeader = req.headers;
     var pathname = url.parse(reqURL).pathname;
-    pathname = pathname.slice(-1) === "/" ? program.dev ? pathname : (pathname + config.Welcome.file) : pathname;
+    pathname = pathname.slice(-1) === "/" ? (program.dev ? pathname : (pathname + config.Welcome.file)) : pathname;
     var filePath = path.join(process.cwd(), path.normalize(pathname.replace(/\.\./g, '')));
     var ext = path.extname(pathname);
     if (program.dev && !ext) {
-        showDir(pathname,res);
+        showDir(pathname, res);
     } else {
         ext = ext ? ext.slice(1) : 'unknown';
         var contentType = mime[ext] || "text/plain";
         fs.exists(filePath, function(exists) {
-            console.log(exists);
             if (!exists) {
-                res.writeHead(404, {
-                    'Content-Type': 'text/plain'
-                });
-                res.write('This request  URL ' + pathname + ' was not found');
-                res.end();
+                if (program.dev) {
+                    res.writeHead(302, {
+                        'Location': path.dirname(pathname)
+                    });
+                    res.end();
+                } else {
+                    res.writeHead(404, {
+                        'Content-Type': 'text/plain'
+                    });
+                    res.write('This request  URL ' + pathname + ' was not found');
+                    res.end();
+                }
+
             } else {
                 fs.stat(filePath, function(err, stat) {
                     if (!err) {
@@ -87,11 +94,30 @@ var httpserver = http.createServer(function(req, res) {
     }
 
 });
-portscanner.findAPortNotInUse(3000, 6000, '127.0.0.1', function(error, port) {
-    if (!error) {
-        httpserver.listen(port);
-        var target = 'http://localhost:' + port + '/index.html';
-        open(target);
-        console.log('start server listen the ' + port + ' port');
-    }
-});
+
+if (program.port) {
+    var portnum = true === program.port? 3000:Number(program.port);
+    portscanner.checkPortStatus(portnum, '127.0.0.1', function(error, status) {
+        if (!error) {
+            if (status == 'closed') {
+                httpserver.listen(portnum);
+                var target = 'http://localhost:' + portnum + '/index.html';
+                open(target);
+                console.log('start server listen the ' + portnum + ' port');
+            } else {
+                console.log('%port is in use now , please try to change other port or do not set parameter -p', portnum);
+            }
+        } else {
+            console.err(error)
+        }
+    })
+} else {
+    portscanner.findAPortNotInUse(3000, 6000, '127.0.0.1', function(error, port) {
+        if (!error) {
+            httpserver.listen(port);
+            var target = 'http://localhost:' + port + '/index.html';
+            open(target);
+            console.log('start server listen the ' + port + ' port');
+        }
+    });
+}
